@@ -11,7 +11,13 @@ module.exports = {
         primary: '#3251D0',
         secondary: '#F5F7FF',
         danger: '#EF4444',
+        dark_danger: '#991B1B',
         dangerHover: '#DC2626',
+        dark_dangerHover: '#7F1D1D',
+        dark: '#1F2937',
+        dark_primary: "#283980",
+        dark_primaryHover: "#283965",
+        muted: '#6B7280',
       },
       fontSize: {
         xs: ['12px', '1rem'],

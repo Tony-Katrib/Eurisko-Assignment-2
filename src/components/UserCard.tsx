@@ -5,7 +5,7 @@ interface User {
   lastName?: string | null;
   email: string;
   status: string;
-  dob: string;
+  dateOfBirth: string;
 }
 
 export default function UserCard({ user }: { user: User }) {
@@ -16,7 +16,7 @@ export default function UserCard({ user }: { user: User }) {
   return (
     <div className="p-base sm:p-base rounded-md shadow-md bg-white dark:bg-dark transition-colors">
       <div className="flex justify-center mb-base">
-        <div className="bg-primary text-white w-20 h-20 flex items-center justify-center rounded-full font-semibold text-title">
+        <div className="bg-primary text-white w-20 h-20 flex items-center justify-center rounded-full font-semibold text-title dark:bg-dark_primary">
           {initials}
         </div>
       </div>
@@ -29,7 +29,7 @@ export default function UserCard({ user }: { user: User }) {
         <div className="flex flex-col gap-xs sm:gap-sm text-xs sm:text-sm text-muted mb-base sm:mb-md">
           <p>Email: {user.email}</p>
           <p>Status: {user.status}</p>
-          <p>Date of birth: {user.dob}</p>
+          <p>Date of birth: {user.dateOfBirth}</p>
         </div>
 
         <div className="flex justify-end gap-xs sm:gap-sm">
