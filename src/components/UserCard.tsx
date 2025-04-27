@@ -1,17 +1,36 @@
 import Button from './Button';
-
-interface User {
-  firstName: string;
-  lastName?: string | null;
-  email: string;
-  status: string;
-  dateOfBirth: string;
-}
+import { User } from '../types/User';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { deleteUser } from '../api/users';
+import { toast } from 'react-hot-toast';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function UserCard({ user }: { user: User }) {
-  const firstInitial = user.firstName[0]?.toUpperCase();
-  const lastInitial = user.lastName?.[0]?.toUpperCase() || '';
-  const initials = `${firstInitial}${lastInitial}`;
+  const queryClient = useQueryClient();
+  const [confirming, setConfirming] = useState(false);
+  const navigate = useNavigate();
+
+  const { mutate, status } = useMutation({
+    mutationFn: () => deleteUser(user.id),
+    onSuccess: () => {
+      toast.success('User deleted successfully!');
+      queryClient.invalidateQueries({ queryKey: ['users'] });
+      setConfirming(false);
+    },
+    onError: () => {
+      toast.error('Failed to delete user.');
+      setConfirming(false);
+    },
+  });
+
+  const isLoading = status === 'pending';
+
+  const handleDelete = () => {
+    mutate();
+  };
+
+  const initials = `${user.firstName[0]?.toUpperCase()}${user.lastName?.[0]?.toUpperCase() || ''}`;
 
   return (
     <div className="p-base sm:p-base rounded-md shadow-md bg-white dark:bg-dark transition-colors">
@@ -33,10 +52,24 @@ export default function UserCard({ user }: { user: User }) {
         </div>
 
         <div className="flex justify-end gap-xs sm:gap-sm">
-          <Button variant="primary">Edit</Button>
-          <Button variant="danger">Delete</Button>
+          <Button variant="primary" onClick={() => navigate(`/dashboard/edit/${user.id}`)}>Edit</Button>
+          <Button variant="danger" onClick={() => setConfirming(true)}>Delete</Button>
         </div>
       </div>
+
+      {confirming && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white dark:bg-dark p-lg rounded-md flex flex-col items-center gap-base">
+            <p className="text-center text-heading">Are you sure you want to delete?</p>
+            <div className="flex gap-base">
+              <Button variant="secondary" onClick={() => setConfirming(false)}>Cancel</Button>
+              <Button variant="danger" onClick={handleDelete} disabled={isLoading}>
+                {isLoading ? 'Deleting...' : 'Confirm'}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

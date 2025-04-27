@@ -20,7 +20,7 @@ export default function Navbar() {
     <nav className="bg-primary text-white px-4 md:px-8 py-4 flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 dark:bg-dark_primary">
       <h1 className="text-title font-bold">User Management</h1>
       <div className="flex gap-2">
-        <Button variant='secondary'>Create User</Button>
+        <Button variant='secondary' onClick={() => navigate('/dashboard/new')}>Create User</Button>
         <Button variant="danger" onClick={handleLogout}>Logout</Button>
         <Button variant='icon' onClick={toggleTheme}>
           {theme === 'dark' ? (
